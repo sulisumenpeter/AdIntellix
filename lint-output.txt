@@ -1,0 +1,138 @@
+
+> tempapp@0.1.0 lint
+> eslint
+
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\scripts\check.js
+   7:33  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  39:21  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  40:10  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  41:12  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  55:24  warning  'err1' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+  60:21  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:21  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\scripts\check.ts
+  19:33  warning  'err1' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\scripts\fix_rls.ts
+  21:11  warning  'sql' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  43:13  warning  'error' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\scripts\insert-project.js
+   7:33  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  39:21  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  40:10  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  41:12  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  55:31  warning  'err' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+  55:40  warning  'data' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+  62:21  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  70:21  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\scripts\insert-project.ts
+  20:33  warning  'err' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  23:17  warning  'data' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\scripts\set_password.ts
+  22:13  warning  'data' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\scripts\verify_rls_query.ts
+  10:5  warning  'supabaseAnonKey' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\app\api\icp\leads\route.ts
+  7:7  warning  'supabase' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\app\dashboard\ad-fatigue\page.tsx
+  28:5  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\app\dashboard\creative-briefs\page.tsx
+   4:10  warning  'useSearchParams' is defined but never used                                                     @typescript-eslint/no-unused-vars
+  38:5   warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  40:3   warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\app\dashboard\google-search-terms\page.tsx
+  14:10  warning  'showConnectForm' is assigned a value but never used                                                                                 @typescript-eslint/no-unused-vars
+  14:27  warning  'setShowConnectForm' is assigned a value but never used                                                                              @typescript-eslint/no-unused-vars
+  15:10  warning  'clientId' is assigned a value but never used                                                                                        @typescript-eslint/no-unused-vars
+  15:20  warning  'setClientId' is assigned a value but never used                                                                                     @typescript-eslint/no-unused-vars
+  16:10  warning  'clientSecret' is assigned a value but never used                                                                                    @typescript-eslint/no-unused-vars
+  16:24  warning  'setClientSecret' is assigned a value but never used                                                                                 @typescript-eslint/no-unused-vars
+  17:10  warning  'devToken' is assigned a value but never used                                                                                        @typescript-eslint/no-unused-vars
+  17:20  warning  'setDevToken' is assigned a value but never used                                                                                     @typescript-eslint/no-unused-vars
+  18:10  warning  'refreshToken' is assigned a value but never used                                                                                    @typescript-eslint/no-unused-vars
+  18:24  warning  'setRefreshToken' is assigned a value but never used                                                                                 @typescript-eslint/no-unused-vars
+  19:10  warning  'customerId' is assigned a value but never used                                                                                      @typescript-eslint/no-unused-vars
+  19:22  warning  'setCustomerId' is assigned a value but never used                                                                                   @typescript-eslint/no-unused-vars
+  54:5   warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  56:5   warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps' or 'react-hooks/set-state-in-effect')
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\app\dashboard\landing-page-match\page.tsx
+  35:5  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\crawling\fetcher.ts
+  4:33  warning  'ValidationError' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\crawling\validator.ts
+  56:12  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+  89:14  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\integrations\apify\apify-adapter.ts
+  205:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\intelligence\competitor-ad.ts
+  1:50  warning  'Advertisement' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\paddle\paddle-client.ts
+   3:8   warning  'crypto' is defined but never used   @typescript-eslint/no-unused-vars
+  22:44  warning  'rawBody' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\providers\google-provider.ts
+   9:22  warning  'organizationId' is defined but never used  @typescript-eslint/no-unused-vars
+  18:33  warning  'options' is defined but never used         @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\providers\meta-provider.ts
+  27:33  warning  'options' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\queue\client.ts
+  1:17  warning  'Worker' is defined but never used       @typescript-eslint/no-unused-vars
+  1:25  warning  'QueueEvents' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\queue\google-ads-worker.ts
+  45:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\rate-limit.ts
+  32:12  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\lib\supabase\server.ts
+  21:20  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\middleware.ts
+  18:48  warning  'options' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\src\workers\icp-lead-scoring.worker.ts
+   2:25  warning  'LeadScore' is defined but never used           @typescript-eslint/no-unused-vars
+  13:51  warning  'projectId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  62:22  warning  'e' is defined but never used                   @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\tests\unit\ad-fatigue-worker.test.ts
+  2:13  warning  'fatigueDetector' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\tests\unit\crawling.test.ts
+  3:21  warning  'FetchError' is defined but never used   @typescript-eslint/no-unused-vars
+  4:10  warning  'crawlWorker' is defined but never used  @typescript-eslint/no-unused-vars
+  6:8   warning  'https' is defined but never used        @typescript-eslint/no-unused-vars
+  7:8   warning  'http' is defined but never used         @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\tests\unit\creative-brief-worker.test.ts
+   3:10  warning  'PatternDetectorService' is defined but never used  @typescript-eslint/no-unused-vars
+  42:12  warning  'table' is defined but never used                   @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\tests\unit\n8n.test.ts
+  4:10  warning  'env' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\JEFF_MARKSMAN\Desktop\AdIntellix\tests\unit\provenance.test.ts
+  4:10  warning  'Queue' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 70 problems (6 errors, 64 warnings)
+  0 errors and 6 warnings potentially fixable with the `--fix` option.
+

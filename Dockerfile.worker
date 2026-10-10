@@ -1,0 +1,14 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY tsconfig.json ./
+COPY src/ ./src/
+
+# Assuming typescript is globally installed or we run through ts-node/tsx
+RUN npm install -g tsx
+
+CMD ["tsx", "src/workers/index.ts"]
