@@ -145,3 +145,65 @@ export async function authorizeOrganization(
     return { authorized: false, error: 'internal_error' };
   }
 }
+
+export interface SubscriptionAuthSuccess {
+  authorized: true;
+  status: 'active' | 'trialing' | 'free';
+  planId: string | null;
+}
+
+export interface SubscriptionAuthFailure {
+  authorized: false;
+  error: 'unauthenticated' | 'invalid_org_id' | 'payment_failed' | 'subscription_expired' | 'internal_error';
+}
+
+export type SubscriptionAuthResult = SubscriptionAuthSuccess | SubscriptionAuthFailure;
+
+export async function authorizeSubscription(
+  organizationIdRaw: unknown
+): Promise<SubscriptionAuthResult> {
+  try {
+    const orgIdResult = OrgIdSchema.safeParse(organizationIdRaw);
+    if (!orgIdResult.success) {
+      return { authorized: false, error: 'invalid_org_id' };
+    }
+    const organizationId = orgIdResult.data;
+
+    const supabase = await createClient();
+
+    const { data: sub, error } = await supabase
+      .from('subscriptions')
+      .select('status, plan_id, current_period_end')
+      .eq('organization_id', organizationId)
+      .maybeSingle();
+
+    if (error) {
+      return { authorized: false, error: 'internal_error' };
+    }
+
+    if (!sub) {
+      // Free tier
+      return { authorized: true, status: 'free', planId: null };
+    }
+
+    if (sub.status === 'past_due' || sub.status === 'failed') {
+      return { authorized: false, error: 'payment_failed' };
+    }
+
+    if (sub.status === 'canceled' || sub.status === 'expired') {
+      // Check if current_period_end is in the future (grace period)
+      if (sub.current_period_end && new Date(sub.current_period_end).getTime() > Date.now()) {
+        return { authorized: true, status: 'active', planId: sub.plan_id };
+      }
+      return { authorized: false, error: 'subscription_expired' };
+    }
+
+    if (sub.status === 'active' || sub.status === 'trialing') {
+      return { authorized: true, status: sub.status, planId: sub.plan_id };
+    }
+
+    return { authorized: false, error: 'subscription_expired' };
+  } catch (err) {
+    return { authorized: false, error: 'internal_error' };
+  }
+}

@@ -61,13 +61,11 @@ describe('Worker Graceful Shutdown', () => {
     process.env.ANTHROPIC_API_KEY = 'test_key';
     // @ts-expect-error - overriding process.exit for test
     process.exit = vi.fn();
-    vi.useFakeTimers();
   });
 
   afterEach(() => {
     process.exit = originalExit;
     process.env = originalEnv;
-    vi.useRealTimers();
     vi.resetModules();
   });
 
@@ -127,6 +125,7 @@ describe('Worker Graceful Shutdown', () => {
   });
 
   it('should force exit if shutdown times out', async () => {
+    vi.useFakeTimers();
     vi.resetModules();
     const indexModule = await import('../../src/workers/index');
     
@@ -141,6 +140,7 @@ describe('Worker Graceful Shutdown', () => {
     
     // The timeout forces exit(1)
     expect(process.exit).toHaveBeenCalledWith(1);
+    vi.useRealTimers();
   });
 
   it('should handle worker close failure without hanging', async () => {

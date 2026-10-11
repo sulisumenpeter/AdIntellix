@@ -142,6 +142,44 @@ export class PaddleClient {
       throw error;
     }
   }
+
+  /**
+   * Creates a transaction on Paddle servers to initiate a checkout securely.
+   * This ensures the client cannot tamper with the organization_id custom data.
+   */
+  async createTransaction(organizationId: string, priceId: string, returnUrl: string) {
+    if (!this.apiKey) throw new Error('PADDLE_API_KEY is not configured');
+    
+    const baseUrl = this.environment === 'sandbox' 
+      ? 'https://sandbox-api.paddle.com' 
+      : 'https://api.paddle.com';
+
+    const response = await fetch(`${baseUrl}/transactions`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        items: [{ price_id: priceId, quantity: 1 }],
+        custom_data: {
+          organization_id: organizationId
+        },
+        checkout: {
+          url: returnUrl
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      logger.error('Paddle createTransaction failed:', err);
+      throw new Error(`Failed to create Paddle transaction: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data; // Returns the transaction object
+  }
 }
 
 export const paddle = new PaddleClient();

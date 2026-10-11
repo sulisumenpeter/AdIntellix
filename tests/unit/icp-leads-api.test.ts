@@ -12,7 +12,11 @@ vi.mock('../../src/lib/supabase/server', () => ({
 }));
 
 vi.mock('../../src/lib/authorization', () => ({
-  requireProjectOwnership: vi.fn(async () => true)
+  requireProjectOwnership: vi.fn(async () => true),
+  authorizeOrganization: vi.fn(async (orgId) => {
+    if (!orgId) return { authorized: false, error: 'invalid_org_id' };
+    return { authorized: true, user: { id: 'user-123' }, role: 'admin', organizationId: orgId };
+  })
 }));
 
 vi.mock('../../src/lib/queue/client', () => ({

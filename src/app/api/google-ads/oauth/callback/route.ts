@@ -25,20 +25,20 @@ export async function GET(req: Request) {
     const state = searchParams.get('state');
 
     if (!code || !state) {
-      return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/google-search-terms?error=Missing+code+or+state`);
+      return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/integrations/google-ads?error=Missing+code+or+state`);
     }
 
     let stateObj;
     try {
         stateObj = JSON.parse(Buffer.from(state, 'base64').toString('utf8'));
     } catch {
-        return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/google-search-terms?error=Invalid+state`);
+        return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/integrations/google-ads?error=Invalid+state`);
     }
 
     const { projectId, organizationId, userId } = stateObj;
 
     if (userId !== sessionUserId) {
-        return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/google-search-terms?error=State+mismatch`);
+        return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/integrations/google-ads?error=State+mismatch`);
     }
 
     const redirectUri = `${env.NEXT_PUBLIC_APP_URL}/api/google-ads/oauth/callback`;
@@ -59,7 +59,7 @@ export async function GET(req: Request) {
     const tokenData = await tokenRes.json();
 
     if (!tokenRes.ok || !tokenData.refresh_token) {
-        return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/google-search-terms?error=Failed+to+obtain+refresh+token`);
+        return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/integrations/google-ads?error=Failed+to+obtain+refresh+token`);
     }
 
     // Now we need the customer_id. The real Google Ads API oauth setup requires listing accessible customers 
@@ -97,12 +97,12 @@ export async function GET(req: Request) {
 
     if (insertError) {
       console.error(insertError);
-      return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/google-search-terms?error=Failed+to+save+connection`);
+      return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/integrations/google-ads?error=Failed+to+save+connection`);
     }
 
-    return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/google-search-terms?success=connected`);
+    return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/integrations/google-ads?success=connected`);
   } catch (error: unknown) {
     console.error(error);
-    return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/google-search-terms?error=Internal+server+error`);
+    return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/dashboard/integrations/google-ads?error=Internal+server+error`);
   }
 }

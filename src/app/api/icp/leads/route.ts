@@ -23,6 +23,7 @@ const csvRowSchema = z.object({
 
 import { createApiClient } from '../../../../lib/supabase/server';
 import { rateLimitRequest, RATE_LIMITS } from '../../../../lib/rate-limit';
+import { authorizeOrganization } from '../../../../lib/authorization';
 
 export async function GET(req: NextRequest) {
   try {
@@ -31,17 +32,18 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Too Many Requests' }, { status: 429, headers: rateLimit.headers });
     }
 
-    const userId = req.headers.get('x-user-id');
-    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const supabaseServer = createApiClient(req);
-    const user = { id: userId };
-
     const url = new URL(req.url);
     const organizationId = url.searchParams.get('organizationId');
-    if (!organizationId) return NextResponse.json({ error: 'Missing organizationId' }, { status: 400 });
 
-    await requireOrganizationMember(supabaseServer, userId, organizationId);
+    const authResult = await authorizeOrganization(organizationId);
+    if (!authResult.authorized) {
+      if (authResult.error === 'unauthenticated') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      if (authResult.error === 'invalid_org_id') return NextResponse.json({ error: 'Invalid organization ID' }, { status: 400 });
+      if (authResult.error === 'internal_error') return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
+    const supabaseServer = createApiClient(req);
     const { data, error } = await supabaseServer.from('leads').select('*').eq('organization_id', organizationId).limit(50);
     if (error) throw new Error(error.message);
 
@@ -68,11 +70,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Payload Too Large' }, { status: 413 });
     }
 
-    const userId = req.headers.get('x-user-id');
-    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const supabaseServer = createApiClient(req);
-    const user = { id: userId };
-    
     let body;
     try {
       body = await req.json();
@@ -93,6 +90,16 @@ export async function POST(req: NextRequest) {
     }
 
     const { organizationId, projectId, icpProfileId, rows } = parsedBody.data;
+
+    const authResult = await authorizeOrganization(organizationId, ['owner', 'admin']);
+    if (!authResult.authorized) {
+      if (authResult.error === 'unauthenticated') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      if (authResult.error === 'invalid_org_id') return NextResponse.json({ error: 'Invalid organization ID' }, { status: 400 });
+      if (authResult.error === 'internal_error') return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    const supabaseServer = createApiClient(req);
     if (typeof projectId !== 'undefined') await requireProjectOwnership(supabaseServer, projectId, organizationId);
     
     // Validate rows
