@@ -1,17 +1,24 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Link2, AlertCircle, CheckCircle2, Zap, Loader2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-export default function GoogleAdsIntegrationPage() {
+function GoogleAdsIntegrationContent() {
   const searchParams = useSearchParams();
   const errorParam = searchParams.get('error');
   const successParam = searchParams.get('success');
 
   const [loading, setLoading] = useState(true);
-  const [connections, setConnections] = useState<Record<string, unknown>[]>([]);
+  
+  interface GoogleAdsConnection {
+    id: string;
+    customer_id: string;
+    created_at: string;
+    [key: string]: unknown;
+  }
+  const [connections, setConnections] = useState<GoogleAdsConnection[]>([]);
   const [organizationId, setOrganizationId] = useState('');
   const [projectId, setProjectId] = useState('');
   const [connecting, setConnecting] = useState(false);
@@ -234,5 +241,13 @@ export default function GoogleAdsIntegrationPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function GoogleAdsIntegrationPage() {
+  return (
+    <Suspense fallback={<div className="flex h-64 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-indigo-500" /></div>}>
+      <GoogleAdsIntegrationContent />
+    </Suspense>
   );
 }

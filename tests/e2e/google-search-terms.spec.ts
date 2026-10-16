@@ -48,18 +48,18 @@ test('should connect google ads and import search terms', async ({ page }) => {
       }
     });
 
-    await page.goto('/dashboard/google-search-terms');
+    await page.goto('/dashboard/integrations/google-ads');
 
     // Should now show the import form
     // Wait for the connections API to load
     await page.waitForResponse(res => res.url().includes('/api/google-ads/connections') && res.status() === 200, { timeout: 10000 }).catch(() => {});
     
-    await expect(page.locator('select').first()).toBeVisible();
-    await page.locator('select').first().selectOption({ index: 1 });
-    
     // Ensure button is enabled
     await expect(page.locator('button:has-text("Import Search Terms")')).toBeEnabled({ timeout: 5000 });
     await page.click('button:has-text("Import Search Terms")');
+
+    // Click link to view search terms
+    await page.click('a:has-text("View Search Terms")');
 
     // After import we need to click refresh because we mocked the flow via refresh button
     await page.click('button:has-text("Refresh")');
@@ -67,6 +67,6 @@ test('should connect google ads and import search terms', async ({ page }) => {
     // Verify search term is shown
     await expect(page.getByText('shopify alternatives')).toBeVisible();
     await expect(page.getByText('Searching for a competitor platform')).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'shopify', exact: true })).toBeVisible(); // negative keyword
+    await expect(page.getByRole('cell', { name: '[shopify]' })).toBeVisible(); // negative keyword
   });
 });

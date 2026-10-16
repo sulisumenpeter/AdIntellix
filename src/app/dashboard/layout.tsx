@@ -8,12 +8,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Sidebar */}
       <aside className="w-64 bg-[var(--color-sidebar-bg)] border-r border-[var(--color-sidebar-border)] flex flex-col shadow-xl z-10 relative transition-all duration-300">
         <div className="h-16 flex items-center px-6 border-b border-[var(--color-sidebar-border)]">
-          <div className="flex items-center gap-3">
+          <Link href="/" aria-label="AdIntelix home" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-md">
               A
             </div>
             <h1 className="text-xl font-bold text-[var(--color-sidebar-fg)] tracking-tight">AdIntelix</h1>
-          </div>
+          </Link>
         </div>
         
         <div className="px-4 py-4">
@@ -22,6 +22,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-md text-[var(--color-sidebar-fg)] hover:bg-[var(--color-sidebar-hover)] hover:text-white text-sm font-medium transition-colors">
               <svg className="w-5 h-5 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
               Overview
+            </Link>
+            <Link href="/how-it-works" className="flex items-center gap-3 px-3 py-2 rounded-md text-[var(--color-sidebar-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white text-sm font-medium transition-colors">
+              <svg className="w-5 h-5 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              How it Works
             </Link>
             <Link href="/dashboard/competitor-ads" className="flex items-center gap-3 px-3 py-2 rounded-md text-[var(--color-sidebar-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white text-sm font-medium transition-colors">
               <svg className="w-5 h-5 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>

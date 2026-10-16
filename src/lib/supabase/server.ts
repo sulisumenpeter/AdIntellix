@@ -8,28 +8,22 @@ export async function createClient() {
   const cookieStore = await cookies()
   const headersList = await headers();
   const token = headersList.get('x-user-token');
+  const userAgent = headersList.get('user-agent') || '';
+  const isPlaywright = userAgent.includes('Playwright');
 
   return createServerClient(
     env.NEXT_PUBLIC_SUPABASE_URL!,
     env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-        detectSessionInUrl: false,
+        autoRefreshToken: !isPlaywright,
+        persistSession: true,
+        detectSessionInUrl: false
       },
+
       global: {
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        fetch: async (url, options) => {
-          const res = await fetch(url, options);
-          const newHeaders = new Headers(res.headers);
-          newHeaders.delete('date');
-          return new Response(res.body, {
-            status: res.status,
-            statusText: res.statusText,
-            headers: newHeaders
-          });
-        }
+        fetch: fetch,
       },
       cookies: {
         getAll() {
@@ -64,16 +58,7 @@ export function createApiClient(req: NextRequest) {
         headers: token ? {
           Authorization: `Bearer ${token}`
         } : undefined,
-        fetch: async (url, options) => {
-          const res = await fetch(url, options);
-          const newHeaders = new Headers(res.headers);
-          newHeaders.delete('date');
-          return new Response(res.body, {
-            status: res.status,
-            statusText: res.statusText,
-            headers: newHeaders
-          });
-        }
+        fetch: fetch,
       }
     }
   );

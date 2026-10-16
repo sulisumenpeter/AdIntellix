@@ -20,7 +20,10 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { 
+        ...devices['Desktop Chrome'],
+        userAgent: devices['Desktop Chrome'].userAgent + ' Playwright'
+      },
       dependencies: ['setup'],
     },
     {

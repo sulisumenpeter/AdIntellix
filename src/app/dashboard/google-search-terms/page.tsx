@@ -10,6 +10,7 @@ export default function GoogleSearchTermsPage() {
   const [organizationId, setOrganizationId] = useState<string>('');
   const [projectId, setProjectId] = useState<string>('');
   const [fetching, setFetching] = useState(true);
+  const [filterClass, setFilterClass] = useState('all');
   
 
 

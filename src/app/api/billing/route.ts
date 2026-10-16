@@ -5,7 +5,7 @@ import { createClient } from '../../../lib/supabase/server';
 
 export async function GET(req: Request) {
   try {
-    const rateLimit = await rateLimitRequest(req as unknown as Parameters<typeof rateLimitRequest>[0], 'billing_get', RATE_LIMITS.STANDARD);
+    const rateLimit = await rateLimitRequest(req as unknown as Parameters<typeof rateLimitRequest>[0], 'billing_get', RATE_LIMITS.DEFAULT);
     if (!rateLimit.success) {
       return NextResponse.json({ error: 'Too Many Requests' }, { status: 429, headers: rateLimit.headers });
     }

@@ -5,14 +5,22 @@ import { createClient } from '@/lib/supabase/client';
 
 export default function ProjectsPage() {
   const supabase = createClient();
-  const [projects, setProjects] = useState<Record<string, unknown>[]>([]);
+  interface Project {
+    id: string;
+    name: string;
+    description?: string;
+    organization_id: string;
+    [key: string]: unknown;
+  }
+
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [orgId, setOrgId] = useState<string | null>(null);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editingProject, setEditingProject] = useState<Record<string, unknown> | null>(null);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
   
   const [formData, setFormData] = useState({ name: '', description: '' });
   const [isSaving, setIsSaving] = useState(false);

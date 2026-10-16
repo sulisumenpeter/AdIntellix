@@ -24,7 +24,7 @@ test('Complete flow: Create ICP, Rules, Leads, and Reports', async ({ page }) =>
     const uniqueICPName = `Enterprise Tech ICP ${Date.now()}`;
     await page.fill('input[name="name"]', uniqueICPName);
 
-    await page.click('button:has-text("Create ICP Profile")');
+    await page.click('button:has-text("Create Profile")');
     
     // Wait for API to complete and UI to update (no reload)
     const testId = `profile-${uniqueICPName.replace(/\s+/g, '-')}`;

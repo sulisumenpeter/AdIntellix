@@ -4,22 +4,22 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
       <header className="h-20 bg-surface border-b border-border flex items-center justify-between px-8 z-10 sticky top-0">
-        <div className="flex items-center gap-3">
+        <Link href="/" aria-label="AdIntelix home" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-md">
             A
           </div>
           <h1 className="text-xl font-bold tracking-tight">AdIntelix</h1>
-        </div>
+        </Link>
         <nav className="hidden md:flex gap-8 items-center text-sm font-medium">
           <Link href="#features" className="text-muted-fg hover:text-foreground transition-colors">Features</Link>
-          <Link href="#how-it-works" className="text-muted-fg hover:text-foreground transition-colors">How it Works</Link>
-          <Link href="#pricing" className="text-muted-fg hover:text-foreground transition-colors">Pricing</Link>
+          <Link href="/how-it-works" className="text-muted-fg hover:text-foreground transition-colors">How it Works</Link>
+          <Link href="/pricing" className="text-muted-fg hover:text-foreground transition-colors">Pricing</Link>
         </nav>
         <div className="flex items-center gap-4">
           <Link href="/login" className="text-sm font-medium text-foreground hover:text-indigo-600 transition-colors">
             Sign In
           </Link>
-          <Link href="/login" className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">
+          <Link href="/signup" className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">
             Get Started
           </Link>
         </div>
@@ -35,7 +35,7 @@ export default function Home() {
             Uncover competitor ad strategies, score creative briefs, detect ad fatigue, and optimize your campaigns with AI-powered insights.
           </p>
           <div className="flex justify-center gap-4">
-            <Link href="/login" className="px-6 py-3 bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-700 transition-colors shadow-sm text-lg">
+            <Link href="/signup" className="px-6 py-3 bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-700 transition-colors shadow-sm text-lg">
               Start Free Trial
             </Link>
             <Link href="#features" className="px-6 py-3 bg-surface border border-border rounded-md font-medium hover:bg-surface-hover transition-colors shadow-sm text-lg">
@@ -81,11 +81,13 @@ export default function Home() {
       <footer className="bg-surface border-t border-border py-12 px-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-fg">
           <div className="flex items-center gap-3">
-            <div className="w-6 h-6 rounded bg-indigo-500 flex items-center justify-center text-white font-bold text-xs">
-              A
-            </div>
-            <span className="font-semibold text-foreground">AdIntelix</span>
-            <span>&copy; {new Date().getFullYear()}</span>
+            <Link href="/" aria-label="AdIntelix home" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <div className="w-6 h-6 rounded bg-indigo-500 flex items-center justify-center text-white font-bold text-xs">
+                A
+              </div>
+              <span className="font-semibold text-foreground">AdIntelix</span>
+            </Link>
+            <span suppressHydrationWarning>&copy; {new Date().getFullYear()}</span>
           </div>
           <div className="flex gap-6">
             <Link href="#" className="hover:text-foreground transition-colors">Privacy Policy</Link>

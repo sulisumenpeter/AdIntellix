@@ -4,7 +4,7 @@ test.describe('Patterns', () => {
 test('can navigate to Ad Patterns and view pattern data', async ({ page }) => {
     // Navigate to Ad Patterns
     await page.goto('/dashboard');
-    await page.click('a:has-text("Ad Patterns")');
+    await page.getByRole('link', { name: 'Ad Patterns' }).click();
     await expect(page).toHaveURL(/\/dashboard\/patterns/);
 
     // Verify the page title
@@ -15,7 +15,7 @@ test('can navigate to Ad Patterns and view pattern data', async ({ page }) => {
     await expect(page.locator('h4', { hasText: 'Recurring Offers' })).toBeVisible();
     await expect(page.locator('h4', { hasText: 'Recurring CTAs' })).toBeVisible();
     await expect(page.locator('h4', { hasText: 'Messaging Themes' })).toBeVisible();
-    await expect(page.locator('h4', { hasText: 'Long-Running Ads (>14 Days)' })).toBeVisible();
+    await expect(page.locator('h4', { hasText: 'Long-Running Ads' })).toBeVisible();
 
     // Verify the empty state or table for Long-Running Ads
     const tableVisible = await page.locator('table').isVisible();
@@ -24,7 +24,7 @@ test('can navigate to Ad Patterns and view pattern data', async ({ page }) => {
       await expect(page.locator('th', { hasText: 'Duration' })).toBeVisible();
       await expect(page.locator('th', { hasText: 'Ad Copy Snippet' })).toBeVisible();
     } else {
-      await expect(page.locator('text=No long-running ads detected.')).toBeVisible();
+      await expect(page.getByText('No long-running ads detected')).toBeVisible();
     }
   });
 });

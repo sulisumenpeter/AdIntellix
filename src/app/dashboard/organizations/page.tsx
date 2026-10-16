@@ -5,12 +5,30 @@ import { createClient } from '@/lib/supabase/client';
 
 export default function OrganizationsPage() {
   const supabase = createClient();
-  const [organizations, setOrganizations] = useState<Record<string, unknown>[]>([]);
-  const [members, setMembers] = useState<Record<string, unknown>[]>([]);
+  interface Organization {
+    id: string;
+    name: string;
+    [key: string]: unknown;
+  }
+  
+  interface OrganizationMember {
+    user_id: string;
+    organization_id: string;
+    role: string;
+    created_at: string;
+    users?: {
+      email?: string;
+      full_name?: string;
+    };
+    [key: string]: unknown;
+  }
+
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [members, setMembers] = useState<OrganizationMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  const [editingOrg, setEditingOrg] = useState<Record<string, unknown> | null>(null);
+  const [editingOrg, setEditingOrg] = useState<Organization | null>(null);
   const [editName, setEditName] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 

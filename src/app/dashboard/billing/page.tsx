@@ -6,8 +6,24 @@ import { CreditCard, AlertCircle, CheckCircle2, Clock, Calendar, Receipt, Shield
 export default function BillingPage() {
   const [loading, setLoading] = useState(true);
   const [organizationId, setOrganizationId] = useState('');
-  const [subscription, setSubscription] = useState<Record<string, unknown> | null>(null);
-  const [events, setEvents] = useState<Record<string, unknown>[]>([]);
+  interface Subscription {
+    status: string;
+    plan_id?: string;
+    current_period_end?: string;
+    [key: string]: unknown;
+  }
+
+  interface BillingEvent {
+    id: string;
+    event_type: string;
+    status: string;
+    created_at: string;
+    paddle_event_id: string;
+    [key: string]: unknown;
+  }
+
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [events, setEvents] = useState<BillingEvent[]>([]);
 
   const fetchBillingData = async (orgId: string) => {
     try {

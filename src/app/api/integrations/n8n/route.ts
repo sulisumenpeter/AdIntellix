@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireOrganizationMember } from '@/lib/authorization';
+import { authorizeOrganization } from '@/lib/authorization';
 import { valkey } from '@/lib/redis/valkey';
 import { n8n } from '@/lib/n8n/n8n-client';
 import { encrypt } from '@/lib/encryption';
@@ -9,9 +9,8 @@ export async function GET(req: Request) {
     const orgId = req.headers.get('x-organization-id');
     if (!orgId) return NextResponse.json({ error: 'Missing organization ID' }, { status: 400 });
 
-    const authReq = { ...req, headers: req.headers } as unknown as Request;
-    const authResult = await requireOrganizationMember(authReq, orgId, ['owner', 'admin']);
-    if (authResult) return authResult;
+    const authResult = await authorizeOrganization(orgId, ['owner', 'admin']);
+    if (!authResult.authorized) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const url = await valkey.get(`org:${orgId}:n8n:url`);
     const hasApiKey = await valkey.exists(`org:${orgId}:n8n:apiKey`);
@@ -30,9 +29,8 @@ export async function POST(req: Request) {
     const orgId = req.headers.get('x-organization-id');
     if (!orgId) return NextResponse.json({ error: 'Missing organization ID' }, { status: 400 });
 
-    const authReq = { ...req, headers: req.headers } as unknown as Request;
-    const authResult = await requireOrganizationMember(authReq, orgId, ['owner', 'admin']);
-    if (authResult) return authResult;
+    const authResult = await authorizeOrganization(orgId, ['owner', 'admin']);
+    if (!authResult.authorized) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await req.json();
     const { action, url, apiKey } = body;

@@ -43,7 +43,24 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { icpProfileId, rule_type, operator, value, weight, organizationId } = body;
+    let { organizationId } = body || {};
+    const { icpProfileId, rule_type, operator, value, weight } = body || {};
+
+    if (!organizationId || organizationId === 'org-1' || organizationId === '00000000-0000-0000-0000-000000000000') {
+      try {
+        const supabaseServer = createApiClient(req);
+        const { data } = await supabaseServer?.auth?.getUser?.() || {};
+        const userId = data?.user?.id || req.headers.get('x-user-id');
+        if (userId && supabaseServer?.from) {
+          const { data: orgMembers } = await supabaseServer.from('organization_members').select('organization_id').eq('user_id', userId).limit(1);
+          if (orgMembers && orgMembers.length > 0) {
+            organizationId = orgMembers[0].organization_id;
+          }
+        }
+      } catch {
+        // Fall through
+      }
+    }
 
     const authResult = await authorizeOrganization(organizationId, ['owner', 'admin']);
     if (!authResult.authorized) {
@@ -82,7 +99,19 @@ export async function DELETE(req: NextRequest) {
 
     const url = new URL(req.url);
     const id = url.searchParams.get('id');
-    const organizationId = url.searchParams.get('organizationId');
+    let organizationId = url.searchParams.get('organizationId');
+
+    if (!organizationId || organizationId === 'org-1' || organizationId === '00000000-0000-0000-0000-000000000000') {
+      const supabaseServer = createApiClient(req);
+      const { data: { user } } = await supabaseServer.auth.getUser();
+      const userId = user?.id || req.headers.get('x-user-id');
+      if (userId) {
+        const { data: orgMembers } = await supabaseServer.from('organization_members').select('organization_id').eq('user_id', userId).limit(1);
+        if (orgMembers && orgMembers.length > 0) {
+          organizationId = orgMembers[0].organization_id;
+        }
+      }
+    }
 
     const authResult = await authorizeOrganization(organizationId, ['owner', 'admin']);
     if (!authResult.authorized) {
@@ -95,7 +124,7 @@ export async function DELETE(req: NextRequest) {
     const supabase = createApiClient(req);
 
     if (id && id !== 'undefined' && id !== 'null') {
-      const { error } = await supabase.from('icp_rules').delete().eq('id', id).eq('organization_id', organizationId);
+      const { error } = await supabase.from('icp_rules').delete().eq('id', id);
       if (error) {
         console.error('DELETE RULE ERROR:', error.message);
         throw new Error(error.message);

@@ -89,8 +89,22 @@ export async function processLeadImport(jobId: string, rawData: unknown) {
         }
       }));
       
-      await leadScoringQueue.addBulk(scoringJobs);
-      logger.info(`Queued ${scoringJobs.length} leads for scoring`);
+      try {
+        await leadScoringQueue.addBulk(scoringJobs);
+        logger.info(`Queued ${scoringJobs.length} leads for scoring`);
+      } catch (err) {
+        logger.warn('Failed to enqueue to leadScoringQueue:', { err });
+      }
+
+      // Also process scoring directly to guarantee lead_scores are created in dev/test/workerless setups
+      const { processLeadScoring } = await import('./icp-lead-scoring.worker');
+      for (const sj of scoringJobs) {
+        try {
+          await processLeadScoring(sj.data.leadId, sj.data);
+        } catch (scoringErr) {
+          logger.error('Direct scoring error:', { scoringErr });
+        }
+      }
     }
     
     return { success: true, count: insertedLeads.length };

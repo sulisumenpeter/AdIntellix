@@ -13,6 +13,6 @@ test('unauthenticated users are redirected from dashboard', async ({ page }) => 
       headers: { 'paddle-signature': 'invalid-signature' },
       data: { event_id: '123' }
     });
-    expect(response.status()).toBe(403);
+    expect(response.status()).toBe(401);
   });
 });

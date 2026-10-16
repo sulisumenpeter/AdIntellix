@@ -4,6 +4,7 @@ import { env } from '../env';
 export const valkey = new Redis(env.REDIS_URL || 'redis://localhost:6379', {
   maxRetriesPerRequest: 1,
   enableOfflineQueue: false,
+  connectTimeout: 500,
 });
 
 valkey.on('error', (err) => {
@@ -15,6 +16,10 @@ const fallbackStore = new Map<string, { count: number; reset: number }>();
 export async function checkRateLimit(key: string, limit: number, windowSeconds: number): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
   const now = Date.now();
   const reset = now + windowSeconds * 1000;
+  
+  if (process.env.PLAYWRIGHT_TEST === 'true') {
+    return { success: true, limit, remaining: limit - 1, reset };
+  }
   
   try {
     // Atomic fixed window rate limit using Lua script

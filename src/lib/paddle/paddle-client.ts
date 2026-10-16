@@ -164,7 +164,7 @@ export class PaddleClient {
         items: [{ price_id: priceId, quantity: 1 }],
         custom_data: {
           organization_id: organizationId
-        },
+        } as Record<string, unknown>,
         checkout: {
           url: returnUrl
         }
@@ -173,7 +173,7 @@ export class PaddleClient {
 
     if (!response.ok) {
       const err = await response.text();
-      logger.error('Paddle createTransaction failed:', err);
+      logger.error('Paddle createTransaction failed:', { error: err });
       throw new Error(`Failed to create Paddle transaction: ${response.status}`);
     }
 

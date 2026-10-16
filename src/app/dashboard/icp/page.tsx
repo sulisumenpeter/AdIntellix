@@ -10,21 +10,26 @@ export default function ICPManagementPage() {
   const [projId, setProjId] = useState<string | null>(null);
 
   const loadData = async () => {
-    let currentOrgId = orgId;
-    let currentProjId = projId;
+    let currentOrgId = orgId && orgId !== 'org-1' && orgId !== '00000000-0000-0000-0000-000000000000' ? orgId : null;
+    let currentProjId = projId && projId !== 'proj-1' ? projId : null;
 
     // Use aggregate Backend API to avoid Supabase auth rate limits
-    console.log('BROWSER COOKIES BEFORE FETCH:', document.cookie);
     const res = await fetch(`/api/icp/dashboard${currentOrgId ? `?organizationId=${currentOrgId}` : ''}`, { credentials: 'include' });
     if (res.ok) {
       const json = await res.json();
-      if (json.organizationId && !currentOrgId) {
-        currentOrgId = json.organizationId;
+      if (json.organizationId) {
+        currentOrgId = String(json.organizationId);
         setOrgId(currentOrgId);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('adintelix_org_id', currentOrgId);
+        }
       }
-      if (json.projectId && !currentProjId) {
-        currentProjId = json.projectId;
+      if (json.projectId) {
+        currentProjId = String(json.projectId);
         setProjId(currentProjId);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('adintelix_project_id', currentProjId);
+        }
       }
       if (json.profiles) setProfiles(json.profiles);
       if (json.rules) setRules(json.rules);
@@ -35,8 +40,15 @@ export default function ICPManagementPage() {
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
-  useEffect(() => { loadData(); }, []);
+  useEffect(() => {
+    const storedOrgId = typeof window !== 'undefined' ? localStorage.getItem('adintelix_org_id') : null;
+    const storedProjId = typeof window !== 'undefined' ? localStorage.getItem('adintelix_project_id') : null;
+    setTimeout(() => {
+      if (storedOrgId) setOrgId(storedOrgId);
+      if (storedProjId) setProjId(storedProjId);
+      loadData();
+    }, 0);
+  }, []);
 
   const handleCreateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -72,6 +84,7 @@ export default function ICPManagementPage() {
       credentials: 'include'
     });
     alert('Import Job Submitted!');
+    loadData();
   };
 
   const handleAddRule = async (e: React.FormEvent<HTMLFormElement>, profileId: string) => {
@@ -102,7 +115,7 @@ export default function ICPManagementPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500" suppressHydrationWarning>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">ICP Lead Scoring</h1>
@@ -110,7 +123,7 @@ export default function ICPManagementPage() {
         </div>
         <form onSubmit={handleCreateProfile} className="flex gap-2 w-full sm:w-auto">
           <input name="name" placeholder="New ICP Name" required className="bg-background border border-border text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow w-full sm:w-48" />
-          <button type="submit" disabled={!orgId || !projId} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm disabled:opacity-50 font-medium hover:bg-indigo-700 transition-colors shadow-sm whitespace-nowrap">Create Profile</button>
+          <button type="submit" disabled={!orgId} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm disabled:opacity-50 font-medium hover:bg-indigo-700 transition-colors shadow-sm whitespace-nowrap">Create Profile</button>
         </form>
       </div>
 
@@ -153,7 +166,8 @@ export default function ICPManagementPage() {
                             <span className="font-medium mx-1">&quot;{String(r.value)}&quot;</span>
                             <span className="text-xs text-muted-fg ml-2 bg-background px-2 py-0.5 border border-border rounded-full">Weight: {String(r.weight)}</span>
                           </span>
-                          <button onClick={() => handleDeleteRule(String(r.id))} className="text-muted-fg hover:text-red-600 p-1 transition-colors" title="Remove rule">
+                          <button onClick={() => handleDeleteRule(String(r.id))} className="text-muted-fg hover:text-red-600 p-1 transition-colors" title="Remove rule" aria-label="Remove rule">
+                            <span className="sr-only">X</span>
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                           </button>
                         </li>

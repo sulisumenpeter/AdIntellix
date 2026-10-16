@@ -73,7 +73,7 @@ export default function CompetitorAdsPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500" suppressHydrationWarning>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h3 className="text-2xl font-bold text-foreground">Competitor Ad Intelligence</h3>
@@ -96,6 +96,7 @@ export default function CompetitorAdsPage() {
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
               className="w-full bg-background border border-border text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              suppressHydrationWarning
             >
               {projects.length === 0 && <option value="">No projects available</option>}
               {projects.map(p => (
@@ -111,6 +112,7 @@ export default function CompetitorAdsPage() {
               className="w-full bg-background border border-border text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
+              suppressHydrationWarning
             />
           </div>
           <div className="w-full lg:w-24">
@@ -122,6 +124,7 @@ export default function CompetitorAdsPage() {
               className="w-full bg-background border border-border text-foreground rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               value={limit}
               onChange={(e) => setLimit(Number(e.target.value))}
+              suppressHydrationWarning
             />
           </div>
           <div className="w-full lg:w-auto lg:self-end">

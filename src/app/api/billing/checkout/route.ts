@@ -6,7 +6,7 @@ import { env } from '../../../../lib/env';
 
 export async function POST(req: NextRequest) {
   try {
-    const rateLimit = await rateLimitRequest(req as unknown as Parameters<typeof rateLimitRequest>[0], 'billing_checkout', RATE_LIMITS.STANDARD);
+    const rateLimit = await rateLimitRequest(req as unknown as Parameters<typeof rateLimitRequest>[0], 'billing_checkout', RATE_LIMITS.DEFAULT);
     if (!rateLimit.success) {
       return NextResponse.json({ error: 'Too Many Requests' }, { status: 429, headers: rateLimit.headers });
     }

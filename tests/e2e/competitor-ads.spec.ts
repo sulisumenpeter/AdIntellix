@@ -9,8 +9,8 @@ test('can import competitor ads and view analysis', async ({ page }) => {
     await expect(page.locator('select')).toBeVisible();
 
     // Fill the URL and Limit
-    await page.fill('input[placeholder="Facebook Ads Library Result URL"]', 'https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=US&q=shopify');
-    await page.fill('input[placeholder="Limit"]', '1');
+    await page.fill('input[type="url"]', 'https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=US&q=shopify');
+    await page.fill('input[type="number"]', '1');
 
     // Trigger Import
     await page.click('text=Import Ads');

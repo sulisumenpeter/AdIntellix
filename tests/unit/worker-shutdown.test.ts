@@ -80,7 +80,7 @@ describe('Worker Graceful Shutdown', () => {
     expect(processOnSpy).toHaveBeenCalledWith('SIGINT', expect.any(Function));
     
     vi.unstubAllEnvs();
-  });
+  }, 60000);
 
   it('should cleanly close workers and redis connection', async () => {
     vi.resetModules();

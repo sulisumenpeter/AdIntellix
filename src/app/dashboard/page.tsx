@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { headers } from 'next/headers'
 
 export default async function DashboardOverview() {
@@ -86,9 +87,9 @@ export default async function DashboardOverview() {
           </div>
           <h4 className="text-lg font-semibold text-foreground mb-2">No Projects Found</h4>
           <p className="text-muted-fg mb-6 max-w-md mx-auto">Get started by creating a project to begin tracking competitor ads and generating insights.</p>
-          <a href="/dashboard/projects" className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+          <Link href="/dashboard/projects" className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
             Create Project
-          </a>
+          </Link>
         </div>
       ) : (
         <>

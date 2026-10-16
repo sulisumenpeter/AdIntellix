@@ -6,12 +6,16 @@ export async function middleware(request: NextRequest) {
     request,
   })
 
+  const isPlaywright = request.headers.get('user-agent')?.includes('Playwright');
+  console.log(`[Middleware] userAgent: ${request.headers.get('user-agent')} | isPlaywright: ${isPlaywright}`);
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       auth: {
-        autoRefreshToken: false,
+        autoRefreshToken: !isPlaywright,
+        persistSession: true,
       },
       cookies: {
         getAll() {
@@ -35,17 +39,25 @@ export async function middleware(request: NextRequest) {
   request.headers.delete('x-user-token');
 
   let user = null;
-  const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+  const { data: { user: supabaseUser }, error } = await supabase.auth.getUser();
+  if (error) {
+    console.error('[Middleware] getUser error:', error);
+  }
   if (supabaseUser) {
     // Also retrieve the session to get the access token if needed for downstream API calls
     const { data: { session } } = await supabase.auth.getSession();
     user = { id: supabaseUser.id, token: session?.access_token };
+  } else {
+    console.log('[Middleware] No user found. Cookies:', request.cookies.getAll().map(c => c.name));
   }
 
   if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
-    return NextResponse.redirect(url)
+    const redirectResponse = NextResponse.redirect(url)
+    // Preserve cookies (e.g. cleared session cookies) on the redirect response
+    supabaseResponse.cookies.getAll().forEach(c => redirectResponse.cookies.set(c.name, c.value, c))
+    return redirectResponse
   }
 
   // Pass user ID to downstream API routes to avoid redundant getSession calls

@@ -6,9 +6,9 @@ test('should display ad fatigue reports', async ({ page }) => {
     await page.goto('/dashboard/ad-fatigue');
 
     // Wait for the page to load
-    await expect(page.locator('h1', { hasText: 'Ad Fatigue Overview' })).toBeVisible();
+    await expect(page.locator('h3', { hasText: 'Ad Fatigue Detection' })).toBeVisible();
 
     // Check if the refresh button is visible
-    await expect(page.locator('button', { hasText: 'Refresh' })).toBeVisible();
+    await expect(page.locator('button', { hasText: 'Refresh Data' })).toBeVisible();
   });
 });

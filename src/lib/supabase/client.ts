@@ -16,6 +16,7 @@ export function createClient() {
       auth: {
         autoRefreshToken: !isPlaywright,
         persistSession: true,
+        detectSessionInUrl: false
       },
       global: {
         fetch: async (url, options) => {

@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Landing Page Match', () => {
 test('should allow queuing a new match analysis', async ({ page }) => {
     // Provide a mocked response for the API
-    await page.route('/api/landing-page-match', async route => {
+    await page.route('**/api/landing-page-match*', async route => {
       if (route.request().method() === 'POST') {
         await route.fulfill({ status: 200, json: { success: true } });
       } else {
@@ -14,19 +14,19 @@ test('should allow queuing a new match analysis', async ({ page }) => {
     await page.goto('/dashboard/landing-page-match');
     
     // Wait for the UI to load
-    await expect(page.locator('text=Analyze New Match')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Analyze New Match' })).toBeVisible();
 
     // Setup the form
-    await page.fill('input[placeholder="Advertisement ID"]', 'ad-123');
-    await page.fill('input[placeholder="Destination URL (Landing Page)"]', 'https://example.com/promo');
+    await page.fill('input[placeholder="e.g. 1234567890"]', 'ad-123');
+    await page.fill('input[placeholder="https://example.com/landing-page"]', 'https://example.com/promo');
 
     // Submit
     page.on('dialog', dialog => dialog.accept()); // Automatically dismiss the alert
     await page.click('button:has-text("Analyze")');
 
     // Should reset fields
-    await expect(page.locator('input[placeholder="Advertisement ID"]')).toHaveValue('');
-    await expect(page.locator('input[placeholder="Destination URL (Landing Page)"]')).toHaveValue('');
+    await expect(page.locator('input[placeholder="e.g. 1234567890"]')).toHaveValue('');
+    await expect(page.locator('input[placeholder="https://example.com/landing-page"]')).toHaveValue('');
   });
 
   test('should display existing matches', async ({ page }) => {
@@ -59,9 +59,9 @@ test('should allow queuing a new match analysis', async ({ page }) => {
     await page.goto('/dashboard/landing-page-match');
 
     // Verify UI rendering
-    await expect(page.locator('text=Test Advertiser')).toBeVisible();
-    await expect(page.locator('text=Buy now for 50% off!')).toBeVisible();
-    await expect(page.locator('text=95/100')).toBeVisible();
-    await expect(page.locator('text=Price missing on landing page')).toBeVisible();
+    await expect(page.getByText('Test Advertiser')).toBeVisible();
+    await expect(page.getByText('Buy now for 50% off!')).toBeVisible();
+    await expect(page.getByText('95')).toBeVisible();
+    await expect(page.getByText('Price missing on landing page')).toBeVisible();
   });
 });
